@@ -1,0 +1,8 @@
+{
+  "short_name" : "PF Starter",
+  "icons": [
+  ],
+  "start_url": "/?utm_source=pwa",
+  "display": "standalone",
+  "scope": "/"
+}
