@@ -13,9 +13,9 @@ module.exports = (env, argv, home) => {
     plugins: [
       new PFNotificationPlugin(home),
       new CopyWebpackPlugin([
-        { from: '../pf-parent/build/manifest.json', transform(content) { return ManifestTransform(content, home) } },
-        { from: '../pf-parent/build/sw.js', to: '../../../../', transform(content) { return SWTransform(content) } },
-        { from: '../pf-parent/build/offline.html', to: '../../../../', transform(content) { return OfflineTransform(content) } },
+        { from: '../pf-parent-theme/build/manifest.json', transform(content) { return ManifestTransform(content, home) } },
+        { from: '../pf-parent-theme/build/sw.js', to: '../../../../', transform(content) { return SWTransform(content) } },
+        { from: '../pf-parent-theme/build/offline.html', to: '../../../../', transform(content) { return OfflineTransform(content) } },
       ]),
       new OptimizeCssAssetsPlugin({
         cssProcessorOptions: { discardComments: { removeAll: true } },

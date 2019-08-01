@@ -10,7 +10,7 @@ module.exports = (env, argv, home) => {
 
     plugins: [
       new CopyWebpackPlugin([
-        { from: '../pf-parent/build/component-loader.js', to: '../_src/scripts/frontend/', transform(content) { return LoaderTransform(content) } },
+        { from: '../pf-parent-theme/build/component-loader.js', to: '../_src/scripts/frontend/', transform(content) { return LoaderTransform(content) } },
       ]),
     ]
   };
