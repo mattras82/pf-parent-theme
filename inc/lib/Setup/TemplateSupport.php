@@ -101,7 +101,5 @@ class TemplateSupport extends RunableAbstract
 
     $this->loader()->addFilter('comments_template', [$this, 'commentsTemplate']);
     $this->loader()->addFilter('get_search_form', [$this, 'searchForm'], PHP_INT_MAX);
-
-    $this->loader()->addShortcode('pf_partial', [$this, 'pf_partial_shortcode']);
   }
 }
