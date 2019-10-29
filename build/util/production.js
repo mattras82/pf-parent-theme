@@ -15,16 +15,16 @@ module.exports = (env, argv, home) => {
   let prefix = '../pf-parent-theme';
   let copyFiles = [
     {from: '/build/manifest.json', transform(content) { return ManifestTransform(content, home) }},
-    {from: '/build/sw.js', transform(content) { return SWTransform(content) }},
-    {from: '/build/offline.html', transform(content) { return OfflineTransform(content) }},
+    {from: '/build/sw.js', to: '../../../../', transform(content) { return SWTransform(content) }},
+    {from: '/build/offline.html', to: '../../../../', transform(content) { return OfflineTransform(content) }},
   ];
 
   copyFiles = copyFiles.map(item => {
     try {
       let childFileExists = fs.readFileSync(home + item.from);
-      item.from = home + item.from;
+      item.from = path.resolve(home + item.from);
     } catch(e) {
-      item.from = prefix + item.from;
+      item.from = path.resolve(prefix + item.from);
     }
     return item;
   });
