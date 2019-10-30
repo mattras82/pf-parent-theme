@@ -9,7 +9,7 @@ module.exports = (env, argv, home) => {
       new CopyWebpackPlugin([
         { from: home + '/_src/images', to: 'images' },
         { from: home + '/node_modules/jquery/dist/jquery.min.js' },
-        { from: home + '/node_modules/@fortawesome/fontawesome-free-webfonts/webfonts', to: 'fonts' },
+        { from: home + '/node_modules/@fortawesome/fontawesome-free/webfonts', to: 'fonts' },
       ]),
       new ImageminPlugin({
         test: /\.(gif|jpe?g|png|svg)$/,

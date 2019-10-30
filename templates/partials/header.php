@@ -3,7 +3,7 @@
     <div class="grid-x grid-padding-x align-middle">
       <div class="header__off-canvas-menu-toggle cell shrink position-absolute medium-position-static hide-for-large">
         <button type="button" data-toggle="off-canvas-menu">
-          <i class="fas fa-bars"></i>
+          <span class="fas fa-bars" aria-hidden="true"></span>
           <span class="show-for-sr">Menu</span>
         </button>
       </div>

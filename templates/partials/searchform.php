@@ -5,7 +5,7 @@
         <div class="input-group-button">
             <button type="submit" class="button">
                 <span class="show-for-sr"><?php _e( 'Search', 'submit button', pf( 'textdomain' ) ); ?></span>
-                <i class="fas fa-search"></i>
+                <span class="fas fa-search" aria-hidden="true"></span>
             </button>
         </div>
     </div>

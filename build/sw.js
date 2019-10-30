@@ -107,6 +107,8 @@ self.addEventListener('message', function (event) {
       caches.open(CACHE_NAME).then((cache) => {
         cache.add(event.data.url);
       });
+    } else if (action === 'remove') {
+      caches.delete(CACHE_NAME);
     }
   }
 });
