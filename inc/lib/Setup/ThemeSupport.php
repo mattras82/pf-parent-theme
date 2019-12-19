@@ -27,9 +27,16 @@ class ThemeSupport extends RunableAbstract
         // Add theme support for selective refresh for widgets.
         add_theme_support( 'customize-selective-refresh-widgets' );
 
-        // Custom Image Sizes
-        add_image_size('pf-hero', 2000, 1200, true);
-        add_image_size('pf-preview-admin', 100, 100, true);
+	    // Custom Image Sizes
+	    $image_sizes = $this->get('theme.image.sizes');
+	    if (is_array($image_sizes) && count($image_sizes) > 0) {
+		    foreach ($image_sizes as $name => $size) {
+			    $crop = isset($size['crop']) ? $size['crop'] : false;
+			    add_image_size($name, $size['width'], $size['height'], $crop);
+		    }
+	    } else {
+		    add_image_size('pf-preview-admin', 100, 100, true);
+	    }
 
         // Adds the frontend stylesheet to the editor
         add_editor_style($this->get('theme_css') . 'theme.css');
@@ -148,7 +155,7 @@ class ThemeSupport extends RunableAbstract
             $new_icons = [
                 sprintf('<link rel="icon" href="%s" sizes="32x32" />', esc_url( $path . '-32.png' )),
                 sprintf('<link rel="icon" href="%s" sizes="192x192" />', esc_url( $path . '-192.png' )),
-                sprintf('<link rel="apple-touch-icon-precomposed" href="%s" />', esc_url( $path . '-180.png' )),
+                sprintf('<link rel="apple-touch-icon" href="%s" />', esc_url( $path . '-192.png' )),
                 sprintf('<meta name="msapplication-TileImage" content="%s" />', esc_url( $path . '-270.png' ))
             ];
             return $new_icons;

@@ -28,11 +28,6 @@ module.exports = function (source, home) {
           if (err) console.log(err);
         });
       sharp(path + name + '.png')
-        .resize(180)
-        .toFile(path + name + '-180.png', (err, info) => {
-          if (err) console.log(err);
-        });
-      sharp(path + name + '.png')
         .resize(32)
         .toFile(path + name + '-32.png', (err, info) => {
           if (err) console.log(err);

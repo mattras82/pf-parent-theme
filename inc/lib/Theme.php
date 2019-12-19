@@ -57,6 +57,7 @@ class Theme
                 'config_path' => $_theme_path . 'config/',
                 'color'     => $this->config['styles']['sass']['theme_color'],
                 'icon'      => $this->config['styles']['icon'],
+	            'image'     => $this->config['styles']['image'],
                 'breakpoints' => $this->config['styles']['sass']['theme_breakpoints'],
                 'build' => $this->config['build'] ?: $this->config['version']
             ],

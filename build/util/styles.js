@@ -4,6 +4,7 @@ module.exports = (env, argv, home) => {
 
   // PLUGINS
   const MiniCssExtractPlugin = require(home + '/node_modules/mini-css-extract-plugin');
+  const SourceMapPlugin = require('webpack').SourceMapDevToolPlugin;
 
   // USER CONFIG
   const config = require(home + '/config/config');
@@ -51,6 +52,9 @@ module.exports = (env, argv, home) => {
     plugins: [
       new MiniCssExtractPlugin({
         filename: '[name].css'
+      }),
+      new SourceMapPlugin({
+        test: /\.s?css$/
       })
     ],
 
