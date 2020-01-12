@@ -27,7 +27,7 @@
             </article>
         </div>
         <aside class="cell medium-3">
-            <?php get_sidebar(); ?>
+            <?php pf_partial('sidebar') ?>
         </aside>
     </div>
 </div>

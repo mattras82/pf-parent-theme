@@ -14,6 +14,7 @@
             '<script src="//cdn.jsdelivr.net/npm/es6-promise/dist/es6-promise.auto.min.js"><\/script>'
         )
     </script>
+    <noscript><style>img[data-src].no-js{display:none;}</style></noscript>
     <?php pf('tag_manager')->head() ?>
     <?php wp_head(); ?>
 </head>

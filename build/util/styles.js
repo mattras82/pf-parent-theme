@@ -19,13 +19,18 @@ module.exports = (env, argv, home) => {
     if (!(typeof sass === 'object' && sass !== null)) return '';
 
     return Object.keys(sass).reduce((variables, variable) => {
-      if (typeof sass[variable] === 'string') {
-        variables += `$${variable}:${sass[variable]};`;
-      } else if (typeof sass === 'object' && sass !== null) {
-        variables += `$${variable}:(${Object.keys(sass[variable]).reduce((_val, _var) => _val += `${_var}:${sass[variable][_var]},`, '')});`
-      }
+      variables += `$${variable}:${sassifyValue(sass[variable])};`;
       return variables;
     }, '');
+  }
+
+  function sassifyValue(value) {
+    // map
+    if (typeof value === 'object' && value !== null) {
+      return `(${Object.keys(value).reduce((_val, _var) => _val += `${_var}:${sassifyValue(value[_var])},`, '')})`;
+    }
+    // string or number
+    return value;
   }
 
   return {
@@ -41,7 +46,7 @@ module.exports = (env, argv, home) => {
               loader: 'sass-loader',
               options: {
                 sourceMap: true,
-                data: configSassVariables(),
+                prependData: configSassVariables(),
               }
             },
           ]

@@ -4,7 +4,7 @@
       <?php pf_partial('loop'); ?>
     </div>
     <div class="cell medium-3">
-      <?php get_sidebar() ?>
+      <?php pf_partial('sidebar') ?>
     </div>
   </div>
 </div>

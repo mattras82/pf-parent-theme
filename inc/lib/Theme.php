@@ -188,37 +188,40 @@ class Theme
         return Template::getInstance($layout);
     }
 
-    /**
-     * Adds a script to the theme.
-     * @param string $handle
-     * @param string $source
-     * @param array|string $dependencies
-     * @param null|int|string $version
-     * @param string $screen
-     * @param bool $admin
-     * @return mixed
-     */
-    public function style($handle, $source, $dependencies = [], $version = null, $screen = 'all', $admin = false)
-    {
-        return self::getInstance()->get($admin ? 'admin_assets' : 'front_end_assets')
-            ->style($handle, $source, $dependencies, $version, $screen);
-    }
+	/**
+	 * Adds a script to the theme.
+	 * @param string $handle
+	 * @param string $source
+	 * @param array|string $dependencies
+	 * @param null|int|string $version
+	 * @param string $screen
+	 * @param bool $admin
+	 * @param callable $blocker
+	 * @return mixed
+	 */
+	public function style($handle, $source, $dependencies = [], $version = null, $screen = 'all', $admin = false, callable $blocker = null)
+	{
+		return self::getInstance()->get($admin ? 'admin_assets' : 'front_end_assets')
+			->style($handle, $source, $dependencies, $version, $screen, $blocker);
+	}
 
-    /**
-     * Adds a script to the theme
-     * @param string $handle
-     * @param string $source
-     * @param array|string $dependencies
-     * @param null|string|int $version
-     * @param bool $footer
-     * @param bool $admin
-     * @return mixed
-     */
-    public function script($handle, $source, $dependencies = [], $version = null, $footer = true, $admin = false)
-    {
-        return self::getInstance()->get($admin ? 'admin_assets' : 'front_end_assets')
-            ->script($handle, $source, $dependencies, $version, $footer);
-    }
+	/**
+	 * Adds a script to the theme
+	 * @param string $handle
+	 * @param string $source
+	 * @param array|string $dependencies
+	 * @param null|string|int $version
+	 * @param bool $footer
+	 * @param bool $admin
+	 * @param callable|null $blocker
+	 * @param bool $defer
+	 * @return mixed
+	 */
+	public function script($handle, $source, $dependencies = [], $version = null, $footer = true, $admin = false, callable $blocker = null, $defer = false)
+	{
+		return self::getInstance()->get($admin ? 'admin_assets' : 'front_end_assets')
+			->script($handle, $source, $dependencies, $version, $footer, $blocker, $defer);
+	}
 
     /**
      * @param string $handle
