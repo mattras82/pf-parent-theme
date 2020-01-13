@@ -1,10 +1,8 @@
 module.exports = (env, argv, home) => {
-  // HELPERS
-  const path = require('path');
 
   // PLUGINS
   const MiniCssExtractPlugin = require(home + '/node_modules/mini-css-extract-plugin');
-  const SourceMapPlugin = require('webpack').SourceMapDevToolPlugin;
+  const SourceMapPlugin = require(home + '/node_modules/webpack').SourceMapDevToolPlugin;
 
   // USER CONFIG
   const config = require(home + '/config/config');

@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = (env, argv, home) => {
   // DEPENDENCIES
   const CopyWebpackPlugin = require(home + '/node_modules/copy-webpack-plugin');
