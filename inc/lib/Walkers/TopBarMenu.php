@@ -3,7 +3,15 @@
 namespace PublicFunction\Walkers;
 
 class TopBarMenu extends \Walker_Nav_Menu
-{
+{private $menu_type;
+  private $remove_ids;
+
+  public function __construct($menuType = 'dropdown', $removeIDs = false)
+  {
+    $this->menu_type = $menuType;
+    $this->remove_ids = $removeIDs;
+  }
+
   /**
    * @inheritdoc
    */
@@ -12,7 +20,10 @@ class TopBarMenu extends \Walker_Nav_Menu
       $element->classes[] = 'active';
 
     if (array_search('menu-item-has-children', $element->classes, true) !== false)
-      $element->classes[] = 'is-dropdown-submenu-parent';
+      $element->classes[] = "is-$this->menu_type-submenu-parent";
+
+    if ($this->remove_ids)
+      $element->ID = '';
 
     parent::display_element( $element, $children_elements, $max_depth, $depth, $args, $output );
   }
@@ -21,6 +32,6 @@ class TopBarMenu extends \Walker_Nav_Menu
    * @inheritdoc
    */
   function start_lvl( &$output, $depth = 0, $args = array() ) {
-    $output .= "\n<ul class=\"is-dropdown-submenu menu\">\n";
+    $output .= "\n<ul class=\"is-$this->menu_type-submenu nested menu\" data-submenu>\n";
   }
 }

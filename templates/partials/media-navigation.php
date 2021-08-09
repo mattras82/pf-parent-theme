@@ -17,7 +17,7 @@ if ($media->have_posts()) : ?>
             $title = (!empty($post_title)) ? $post_title : __('(no title)');
             ?>
             <li>
-                <a href="<?php the_permalink($post->ID); ?>"><?php echo $title; ?></a>
+                <a href="<?php the_permalink($post->ID); ?>"><?= $title; ?></a>
             </li>
         <?php endforeach; ?>
     </ul>

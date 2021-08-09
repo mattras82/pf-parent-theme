@@ -255,37 +255,6 @@ class ScriptsAndStyles extends RunableAbstract
         return $tag;
     }
 
-    public function removeMigrate($scripts)
-    {
-        if (!is_admin() && isset($scripts->registered['jquery'])) {
-            $jquery = $scripts->registered['jquery'];
-
-            if ($jquery->deps) {
-                $jquery->deps = array_diff($jquery->deps, ['jquery-migrate']);
-            }
-        }
-    }
-
-    public function jqueryToFooter()
-    {
-        if (!is_admin()) {
-            $wp_scripts = wp_scripts();
-            $wp_scripts->add_data('jquery', 'group', 1);
-            $wp_scripts->add_data('jquery-core', 'group', 1);
-            if($this->get('use_jquery_migrate'))
-                $wp_scripts->add_data('jquery-migrate', 'group', 1);
-        }
-    }
-
-    public function replaceJquery()
-    {
-        if (!is_admin()) {
-            wp_deregister_script('jquery');
-            wp_register_script('jquery', $this->get('assets.dir') . 'jquery.min.js', [], null, true);
-            wp_enqueue_script('jquery');
-        }
-    }
-
     /**
      * @inheritdoc
      */
@@ -348,14 +317,5 @@ class ScriptsAndStyles extends RunableAbstract
 
         if (count($this->deferredScripts) > 0)
             $this->loader()->addFilter('script_loader_tag', [$this, 'addDefer'], 10, 3);
-
-        if (file_exists($this->get('theme.path') . 'assets/jquery.min.js')) {
-            $this->loader()->addAction('wp_enqueue_scripts', [$this, 'replaceJquery']);
-        } else {
-            if (!$this->get('use_jquery_migrate'))
-                $this->loader()->addAction('wp_default_scripts', [$this, 'removeMigrate']);
-
-            $this->loader()->addAction('wp_enqueue_scripts', [$this, 'jqueryToFooter'], 11);
-        }
     }
 }

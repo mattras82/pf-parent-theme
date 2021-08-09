@@ -36,10 +36,52 @@ class GoogleTagManager extends RunableAbstract
         add_settings_field(
             'tag',
             'Tag ID',
-            [$this, 'render_tag_field'],
+            [$this, 'render_text_field'],
             $this->option_group,
-            'settings'
+            'settings',
+            [
+                'key'            => 'tag',
+                'placeholder'   => 'GTM-ABCD123'
+            ]
         );
+
+        add_settings_field(
+            'add_flicker',
+            'Add Anti-Flicker Snippet?',
+            [$this, 'render_checkbox_field'],
+            $this->option_group,
+            'settings',
+            [
+                'key'    => 'add_flicker',
+            ]
+        );
+
+        if ($this->get_value('add_flicker') === 'on') {
+            add_settings_field(
+                'async_timeout',
+                'Anti-Flicker Timeout (Milliseconds)',
+                [$this, 'render_text_field'],
+                $this->option_group,
+                'settings',
+                [
+                    'key'           => 'async_timeout',
+                    'default'       => '1000'
+                ]
+            );
+
+            add_settings_field(
+                'async_slugs',
+                'Anti-Flicker Page Slugs',
+                [$this, 'render_textarea_field'],
+                $this->option_group,
+                'settings',
+                [
+                    'key'           => 'async_slugs',
+                    'desc'          => 'If you only want the Anti-Flicker Snippet to run on certain pages, please add the page slug(s) here.<br>One slug per line. Use "home" for homepage.<br>Leave this field blank to add the snippet to all pages (this is not recommended).',
+                    'placeholder'   => 'ie. about-us&#10;contact-us'
+                ]
+            );
+        }
     }
 
     public function add_options_page()
@@ -76,17 +118,81 @@ class GoogleTagManager extends RunableAbstract
         <?php
     }
 
-    public function render_tag_field()
+    private function setup_field_args(&$args)
     {
-        ?>
-        <input
-            type="text"
-            id="pf_gtm_tag"
-            name="<?= $this->option_name ?>[tag]"
-            value="<?= $this->get_value('tag') ?>"
-            placeholder="GTM-ABCD123"
-        >
-        <?php
+        $key = $args['key'];
+        unset($args['key']);
+        $desc = '';
+        if (!empty($args['desc'])) {
+            $desc = $args['desc'];
+            unset($args['desc']);
+        }
+        return [
+            $key,
+            $desc
+        ];
+    }
+
+    public function render_text_field($args = [])
+    {
+        list($id, $desc) = $this->setup_field_args($args);
+        $attr = wp_parse_args($args, [
+            'id'        => "gc_gtm_$id",
+            'name'      => "{$this->option_name}[{$id}]",
+            'value'     => $this->get_value($id, !empty($args['default']) ? $args['default'] : null),
+            'type'      => 'text'
+        ]);
+        echo sprintf('<input %s />', $this->attr_to_string($attr));
+        if ($desc) {
+            echo sprintf('<p>%s</p>', $desc);
+        }
+    }
+
+    public function render_textarea_field($args = [])
+    {
+        list($id, $desc) = $this->setup_field_args($args);
+        $attr = wp_parse_args($args, [
+            'id'        => "gc_gtm_$id",
+            'name'      => "{$this->option_name}[{$id}]",
+            'style'     => 'min-height:100px'
+        ]);
+        $val = $this->get_value($id, !empty($args['default']) ? $args['default'] : null);
+        echo sprintf('<textarea %s>%s</textarea>', $this->attr_to_string($attr), $val);
+        if ($desc) {
+            echo sprintf('<p>%s</p>', $desc);
+        }
+    }
+
+    public function render_checkbox_field($args = [])
+    {
+        list($id, $desc) = $this->setup_field_args($args);
+        $attr = wp_parse_args($args, [
+            'id'        => "gc_gtm_$id",
+            'name'      => "{$this->option_name}[{$id}]",
+            'value'     => 'on',
+            'type'      => 'checkbox'
+        ]);
+        $val = $attr['value'];
+        echo sprintf(
+            '<input %s />',
+            $this->attr_to_string(
+                $attr,
+                checked($this->get_value($id), $val, false)
+            )
+        );
+        if ($desc) {
+            echo sprintf('<p>%s</p>', $desc);
+        }
+    }
+
+    private function attr_to_string($attr, $str = '')
+    {
+        foreach ($attr as $a => $value) {
+            if (substr($a, 0, 5) === 'maybe') continue;
+            $value = esc_attr__($value, $this->get('textdomain'));
+            $str .= " {$a}=\"{$value}\"";
+        }
+        return $str;
     }
 
     public function get_value($field = '')
@@ -116,14 +222,54 @@ class GoogleTagManager extends RunableAbstract
 
     public function head()
     {
-        if ($tag = $this->get_value('tag')) { ?>
-        <!-- Google Tag Manager -->
-        <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-                    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-            })(window,document,'script','dataLayer','<?= $tag ?>');</script>
-        <!-- End Google Tag Manager -->
+        if ($tag = $this->get_value('tag')) {
+            $this->anti_flicker($tag); ?>
+            <!-- Google Tag Manager -->
+            <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','<?= $tag ?>');</script>
+            <!-- End Google Tag Manager -->
+        <?php
+        }
+    }
+
+    private function anti_flicker($tag)
+    {
+        $display = false;
+        if ($this->get_value('add_flicker') === 'on') {
+            $display = true;
+            $timeout = $this->get_value('async_timeout', '1000');
+            $slugs = $this->get_value('async_slugs');
+            if ($slugs) {
+                $display = false;
+                $url = $_SERVER['REQUEST_URI'];
+                $url = explode('?', $url)[0];
+                $url = explode('#', $url)[0];
+                $url_slugs = explode('/', $url);
+                $is_home = is_home() || is_front_page();
+                foreach (explode(PHP_EOL, $slugs) as $slug) {
+                    $slug = trim($slug);
+                    if (empty($slug)) continue;
+                    if (
+                        in_array($slug, $url_slugs)
+                        || ($slug === 'home' && $is_home)
+                    ) {
+                        $display = true;
+                        break;
+                    }
+                }
+            }
+        }
+        if ($display) { ?>
+            <!-- anti-flicker snippet  -->
+            <style>.async-hide { opacity: 0 !important} </style>
+            <script>(function(a,s,y,n,c,h,i,d,e){s.className+=' '+y;h.start=1*new Date;
+            h.end=i=function(){s.className=s.className.replace(RegExp(' ?'+y),'')};
+            (a[n]=a[n]||[]).hide=h;setTimeout(function(){i();h.end=null},c);h.timeout=c;
+            })(window,document.documentElement,'async-hide','dataLayer',<?= $timeout ?>,
+            {'<?= $tag ?>':true});</script>
         <?php
         }
     }
@@ -131,11 +277,10 @@ class GoogleTagManager extends RunableAbstract
     public function body()
     {
         if ($tag = $this->get_value('tag')) { ?>
-        <!-- Google Tag Manager (noscript) -->
-        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= $tag ?>"
-                          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-        <!-- End Google Tag Manager (noscript) -->
-        <?php
+            <!-- Google Tag Manager (noscript) -->
+            <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=<?= $tag ?>" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+            <!-- End Google Tag Manager (noscript) -->
+<?php
         }
     }
 

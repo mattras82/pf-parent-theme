@@ -54,6 +54,7 @@ class Theme
                 'directory' => $_theme_dir,
                 'path' => $_theme_path,
                 'version' => $this->config['version'],
+                'parent_version' => '1.2.0',
                 'config_path' => $_theme_path . 'config/',
                 'color'     => $this->config['styles']['sass']['theme_color'],
                 'icon'      => $this->config['styles']['icon'],
@@ -199,7 +200,7 @@ class Theme
 	 * @param callable $blocker
 	 * @return mixed
 	 */
-	public function style($handle, $source, $dependencies = [], $version = null, $screen = 'all', $admin = false, callable $blocker = null)
+	public function style($handle, $source, $dependencies = [], $version = 'asset', $screen = 'all', $admin = false, callable $blocker = null)
 	{
 		return self::getInstance()->get($admin ? 'admin_assets' : 'front_end_assets')
 			->style($handle, $source, $dependencies, $version, $screen, $blocker);
@@ -264,6 +265,19 @@ class Theme
         $instance->loader()->addFilter($hook, $callback, $priority, $args);
         return $instance;
     }
+
+	/**
+	 * Adds a shortcode
+	 * @param string $hook
+	 * @param callable $callback
+	 * @return $this
+	 */
+	public function shortcode($hook, callable $callback)
+	{
+		$instance = self::getInstance();
+		$instance->loader()->addShortcode($hook, $callback);
+		return $instance;
+	}
 
     /**
      * Returns prefixed string with short namespace

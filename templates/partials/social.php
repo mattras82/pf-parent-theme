@@ -2,9 +2,9 @@
     <ul class="social-links menu simple">
         <?php foreach($social as $network): ?>
           <li>
-            <a href="<?php echo $network->url ?>" target="_blank" class="social-link social-link-<?php echo $network->type ?>" title="<?php echo $network->name ?>" rel="noopener">
+            <a href="<?= $network->url ?>" target="_blank" class="social-link social-link-<?= $network->type ?>" title="<?= $network->name ?>" rel="noopener">
               <?php $network->icon() ?>
-              <span class="show-for-sr"><?php echo $network->name ?></span>
+              <span class="show-for-sr"><?= $network->name ?></span>
             </a>
           </li>
         <?php endforeach ?>

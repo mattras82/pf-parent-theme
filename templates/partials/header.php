@@ -8,7 +8,7 @@
         </button>
       </div>
       <div class="header__logo cell medium-shrink text-center">
-        <a href="<?php echo home_url(); ?>" title="<?php bloginfo('name') ?>">
+        <a href="<?= home_url(); ?>" title="<?php bloginfo('name') ?>">
           <img src="<?php pf_option('header.logo') ?>" alt="<?php bloginfo('name') ?>">
           <span class="show-for-sr"><?php bloginfo('name'); ?></span>
         </a>

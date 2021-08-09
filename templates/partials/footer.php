@@ -12,7 +12,7 @@
     <div class="footer__copyright grid-container">
         <div class="grid-x grid-margin-x grid-padding-y text-center">
             <div class="cell">
-                <p>&copy; <?php echo Date('Y'); ?> <a href="<?php home_url(); ?>"><?php echo bloginfo('name'); ?></a></p>
+                <p>&copy; <?= Date('Y'); ?> <a href="<?php home_url(); ?>"><?= bloginfo('name'); ?></a></p>
             </div>
         </div>
     </div>

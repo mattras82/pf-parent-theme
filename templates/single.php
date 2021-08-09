@@ -7,8 +7,8 @@
                         <div class="entry-meta font-bold text-uppercase">
                             <?php if (in_array(get_post_type(), array('post', 'attachment'))): ?>
                                 <span class="post-date">
-                            <a href="<?php echo esc_url(get_permalink()) ?>" rel="bookmark">
-                                <time class="entry-date" datetime="<?php echo esc_attr(get_the_date('c')) ?>"><?php echo get_the_date() ?></time>
+                            <a href="<?= esc_url(get_permalink()) ?>" rel="bookmark">
+                                <time class="entry-date" datetime="<?= esc_attr(get_the_date('c')) ?>"><?= get_the_date() ?></time>
                             </a>
                         </span>
                             <?php endif ?>

@@ -38,7 +38,28 @@ class ThemeSupport extends RunableAbstract
 		    add_image_size('pf-preview-admin', 100, 100, true);
 	    }
 
+        // Get config to customize gutenberg settings
+        $sass_config = gc()->config()['styles']['sass'];
+        if (isset($sass_config['theme_palette']) && !empty($sass_config['theme_palette'])) {
+            $palette = [];
+            foreach ($sass_config['theme_palette'] as $color => $hex) {
+                if ($hex === '$theme_color') $hex = $sass_config['theme_color'];
+                $palette[] = [
+                    'name' => __(ucwords($color), $this->get('textdomain')),
+                    'slug' => $color,
+                    'color' => $hex,
+                ];
+            }
+
+            add_theme_support('editor-color-palette', $palette);
+            add_theme_support('disable-custom-colors');
+        }
+
+        // Wide Alignment
+        add_theme_support('align-wide');
+
         // Adds the frontend stylesheet to the editor
+        add_theme_support('editor-styles');
         add_editor_style($this->get('theme_css') . 'theme.css');
 
         // Registers our menu's
@@ -46,6 +67,9 @@ class ThemeSupport extends RunableAbstract
             'top-bar' => __('Top Bar', $this->get('textdomain')),
             'footer-menu'  => __('Footer Menu', $this->get('textdomain')),
         ]);
+
+        // Yoast Breadcrumbs
+        add_theme_support('yoast-seo-breadcrumbs');
     }
 
     /**
@@ -126,7 +150,7 @@ class ThemeSupport extends RunableAbstract
         $width  = $imageSize[0];
         $height = $imageSize[1];
         ?>
-        <!-- custom <?php echo $this->get('theme.short_name'); ?> login logo -->
+        <!-- custom <?= $this->get('theme.short_name'); ?> login logo -->
         <style>
             .login h1 a {
                 display: block;
@@ -134,10 +158,10 @@ class ThemeSupport extends RunableAbstract
                 background-size: cover !important;
                 width: 100% !important;
                 height: 0 !important;
-                padding-bottom: <?php echo ($height / $width) * 100 ?>% !important;
+                padding-bottom: <?= ($height / $width) * 100 ?>% !important;
             }
         </style>
-        <!-- /custom <?php echo $this->get('theme.short_name'); ?> login logo -->
+        <!-- /custom <?= $this->get('theme.short_name'); ?> login logo -->
         <?php
     }
 
@@ -192,6 +216,10 @@ class ThemeSupport extends RunableAbstract
 		}
 		return $atts;
 	}
+    
+    public function ob_end_flush_all() {
+        while (@ob_end_flush());
+    }
 
     public function run()
     {
@@ -203,5 +231,8 @@ class ThemeSupport extends RunableAbstract
         $this->loader()->addFilter('get_site_icon_url', [$this, 'siteIconUrl']);
         $this->loader()->addAction('after_setup_theme', [$this, 'maintenancePage']);
 	    $this->loader()->addFilter('nav_menu_link_attributes', [$this, 'relAttrMenuLinks'], 10, 2);
+        if (remove_action('shutdown', 'wp_ob_end_flush_all')) {
+            $this->loader()->addAction('shutdown', [$this, 'ob_end_flush_all']);
+        }
     }
 }
