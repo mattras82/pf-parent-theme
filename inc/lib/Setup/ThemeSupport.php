@@ -39,7 +39,7 @@ class ThemeSupport extends RunableAbstract
 	    }
 
         // Get config to customize gutenberg settings
-        $sass_config = gc()->config()['styles']['sass'];
+        $sass_config = pf()->config()['styles']['sass'];
         if (isset($sass_config['theme_palette']) && !empty($sass_config['theme_palette'])) {
             $palette = [];
             foreach ($sass_config['theme_palette'] as $color => $hex) {
