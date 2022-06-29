@@ -7,7 +7,7 @@
           'container' => 'nav',
           'menu_class' => 'vertical menu accordion-menu',
           'theme_location' => 'top-bar',
-          'depth' => gc_is_amp_endpoint() ? 1 : 5,
+          'depth' => pf_is_amp_endpoint() ? 1 : 5,
           'walker' => new \PublicFunction\Walkers\TopBarMenu('accordion'),
           'items_wrap' => '<ul id="%1$s" class="%2$s" data-accordion-menu>%3$s</ul>'
         ]);
