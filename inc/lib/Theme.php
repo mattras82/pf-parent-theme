@@ -54,7 +54,7 @@ class Theme
                 'directory' => $_theme_dir,
                 'path' => $_theme_path,
                 'version' => $this->config['version'],
-                'parent_version' => '1.2.2',
+                'parent_version' => '1.2.3',
                 'config_path' => $_theme_path . 'config/',
                 'color'     => $this->config['styles']['sass']['theme_color'],
                 'icon'      => $this->config['styles']['icon'],

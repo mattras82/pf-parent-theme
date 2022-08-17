@@ -137,7 +137,7 @@ class GoogleTagManager extends RunableAbstract
     {
         list($id, $desc) = $this->setup_field_args($args);
         $attr = wp_parse_args($args, [
-            'id'        => "gc_gtm_$id",
+            'id'        => "pf_gtm_$id",
             'name'      => "{$this->option_name}[{$id}]",
             'value'     => $this->get_value($id, !empty($args['default']) ? $args['default'] : null),
             'type'      => 'text'
@@ -152,7 +152,7 @@ class GoogleTagManager extends RunableAbstract
     {
         list($id, $desc) = $this->setup_field_args($args);
         $attr = wp_parse_args($args, [
-            'id'        => "gc_gtm_$id",
+            'id'        => "pf_gtm_$id",
             'name'      => "{$this->option_name}[{$id}]",
             'style'     => 'min-height:100px'
         ]);
@@ -167,7 +167,7 @@ class GoogleTagManager extends RunableAbstract
     {
         list($id, $desc) = $this->setup_field_args($args);
         $attr = wp_parse_args($args, [
-            'id'        => "gc_gtm_$id",
+            'id'        => "pf_gtm_$id",
             'name'      => "{$this->option_name}[{$id}]",
             'value'     => 'on',
             'type'      => 'checkbox'
