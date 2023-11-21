@@ -16,6 +16,9 @@ class TopBarMenu extends \Walker_Nav_Menu
    * @inheritdoc
    */
   function display_element( $element, &$children_elements, $max_depth, $depth=0, $args, &$output ) {
+
+    if (!is_array($element->classes)) $element->classes = [$element->classes];
+    
     if ($element->current || $element->current_item_ancestor)
       $element->classes[] = 'active';
 
