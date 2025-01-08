@@ -136,7 +136,7 @@ class ThemeSupport extends RunableAbstract
     {
         $file = $ext = false;
 
-        foreach(['png', 'jpg', 'jpeg', 'gif'] as $_ext) {
+        foreach(['png', 'jpg', 'jpeg', 'gif', 'svg'] as $_ext) {
             if(file_exists($this->get('theme.path') . "/assets/images/logo.{$_ext}")) {
                 $file = $this->get('assets.images') . "logo.{$_ext}";
                 $file_path = $this->get('assets.images_path') . "logo.{$_ext}";
@@ -154,10 +154,10 @@ class ThemeSupport extends RunableAbstract
         <style>
             .login h1 a {
                 display: block;
-                background-image: url("<?php pf_image('logo.' . $ext) ?>") !important;
                 background-size: cover !important;
                 width: 100% !important;
                 height: 0 !important;
+                background-image: url("<?php pf_image('logo.' . $ext) ?>") !important;
                 padding-bottom: <?= ($height / $width) * 100 ?>% !important;
             }
         </style>

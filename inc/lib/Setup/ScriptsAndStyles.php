@@ -186,7 +186,7 @@ class ScriptsAndStyles extends RunableAbstract
             'handle' => $handle,
             'source' => $source,
             'dependencies' => $dependencies,
-            'version' => $this->version($version == 'asset' ? $source : $version),
+            'version' => $version == 'asset' ? $this->version($source) : $version,
             'footer' => $footer,
             'blocker' => $blocker
         ];

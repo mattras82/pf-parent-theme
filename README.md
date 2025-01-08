@@ -1,10 +1,15 @@
 # PublicFunction WordPress Parent Theme #
 
- - Version 1.2.4
+ - Version 1.2.5
  
 ### WordPress parent theme that adds functionality, templates, and WebPack build scripts to be used in conjunction with the PF WordPress Starter Theme. This theme should *not* be used on its own. ###
 
 ## Changelog ##
+
+### v.1.2.5
+#### Released on: 08 Jan 2025
+- Fix: Fixed versioning for scripts
+- Fix: Fixed PHP 8 warnings for classes that implement ArrayAccess
 
 ### v.1.2.4
 #### Released on: 21 Nov 2023
