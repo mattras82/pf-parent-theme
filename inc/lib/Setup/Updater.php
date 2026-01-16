@@ -117,7 +117,7 @@ class Updater extends MenuPageAbstract
         }
         foreach (array_keys(self::PLUGIN_LIST) as $plugin) {
             if (!empty($_POST[$this->option_name][$plugin])) {
-                exec("wp plugin install --activate https://github.com/mattras82/$plugin/archive/master.zip 2>&1", $result);
+                exec("wp plugin install --activate --force https://github.com/mattras82/$plugin/archive/master.zip 2>&1", $result);
             }
         }
 
