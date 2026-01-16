@@ -52,13 +52,13 @@ class Updater extends MenuPageAbstract
         );
 
         add_settings_field(
-            'pf_parent_theme',
+            'pf-parent-theme',
             'PF Parent Theme',
             [$this, 'render_checkbox_field'],
             $this->option_group,
             'settings',
             [
-                'key'            => 'pf_parent_theme',
+                'key'            => 'pf-parent-theme',
             ]
         );
 
