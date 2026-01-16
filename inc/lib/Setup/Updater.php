@@ -113,11 +113,11 @@ class Updater extends MenuPageAbstract
     {
         $result = [];
         if (!empty($_POST[$this->option_name]['pf-parent-theme'])) {
-            exec('wp theme install https://github.com/mattras82/pf-parent-theme/archive/master.zip', $result);
+            exec('wp theme install https://github.com/mattras82/pf-parent-theme/archive/master.zip 2>&1', $result);
         }
         foreach (array_keys(self::PLUGIN_LIST) as $plugin) {
             if (!empty($_POST[$this->option_name][$plugin])) {
-                exec("wp plugin install --activate https://github.com/mattras82/$plugin/archive/master.zip", $result);
+                exec("wp plugin install --activate https://github.com/mattras82/$plugin/archive/master.zip 2>&1", $result);
             }
         }
 
