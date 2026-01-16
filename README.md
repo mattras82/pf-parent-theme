@@ -1,10 +1,18 @@
 # PublicFunction WordPress Parent Theme #
 
- - Version 1.2.5
+ - Version 1.3.0
  
 ### WordPress parent theme that adds functionality, templates, and WebPack build scripts to be used in conjunction with the PF WordPress Starter Theme. This theme should *not* be used on its own. ###
 
 ## Changelog ##
+
+### v.1.3.0
+#### Released on: 16 Jan 2026
+- **New Feature**: Added PF Updater tool to update all PF packages from admin
+- Update: Added MenuPageAbstract class for easier menu page construction
+- Update: Bumped minimum PHP version from 5.6 to 7.3
+- Fix: Fixed asDependency() function in ScriptsAndStyles
+- Fix: Fixed PHP 8 warnings for deprecated implicitly null parameter
 
 ### v.1.2.5
 #### Released on: 08 Jan 2025

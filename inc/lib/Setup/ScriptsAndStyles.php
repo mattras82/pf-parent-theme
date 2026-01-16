@@ -61,7 +61,7 @@ class ScriptsAndStyles extends RunableAbstract
      */
     public function prefix($name = '')
     {
-        return strtolower( $this->get('theme.short_name') ) . '_' . $name;
+        return strtolower($this->get('theme.short_name')) . '_' . $name;
     }
 
     /**
@@ -71,9 +71,9 @@ class ScriptsAndStyles extends RunableAbstract
      * @param callable|null $blocker
      * @return $this
      */
-    public function blockIf(callable $blocker = null)
+    public function blockIf(?callable $blocker = null)
     {
-        if(is_callable($blocker))
+        if (is_callable($blocker))
             $this->blocker = $blocker;
 
         return $this;
@@ -89,10 +89,10 @@ class ScriptsAndStyles extends RunableAbstract
         if ($this->get('env.production'))
             return $this->get('theme.build');
 
-        if($file === 'theme')
+        if ($file === 'theme')
             return $this->get('theme.version');
 
-        if(strpos($file, $this->get('theme.directory')) !== false) {
+        if (strpos($file, $this->get('theme.directory')) !== false) {
             $file = str_replace(
                 $this->get('theme.directory'),
                 $this->get('theme.path'),
@@ -100,7 +100,7 @@ class ScriptsAndStyles extends RunableAbstract
             );
         }
 
-        if(empty($file) || !file_exists($file))
+        if (empty($file) || !file_exists($file))
             $file = $this->get('theme.path') . 'style.css';
 
         return base_convert(date('YmdHis', filemtime($file)), 10, 36);
@@ -116,12 +116,12 @@ class ScriptsAndStyles extends RunableAbstract
      * @param callable|null $blocker
      * @return $this
      */
-    public function style($handle, $source, $dependencies = [], $version = 'asset', $screen = 'all', callable $blocker = null)
+    public function style($handle, $source, $dependencies = [], $version = 'asset', $screen = 'all', ?callable $blocker = null)
     {
-        if(empty($handle))
+        if (empty($handle))
             throw new \RuntimeException('A valid `$handle` is required to register a new style');
 
-        if(empty($source))
+        if (empty($source))
             throw new \RuntimeException('A valid `$source` is required to register a new style');
 
         $this->lastItemType = 'style';
@@ -146,10 +146,10 @@ class ScriptsAndStyles extends RunableAbstract
      */
     public function localize($handle, $object, $data = [])
     {
-        if(empty($handle))
+        if (empty($handle))
             throw new \RuntimeException('A valid `$handle` is required to register a localized object');
 
-        if(empty($object))
+        if (empty($object))
             throw new \RuntimeException('A valid `$object` is required to register a localized object');
 
         $this->lastItemType = 'localized';
@@ -173,12 +173,12 @@ class ScriptsAndStyles extends RunableAbstract
      * @param bool $defer
      * @return $this
      */
-    public function script($handle, $source, $dependencies = [], $version = 'asset', $footer = true, callable $blocker = null, $defer = false)
+    public function script($handle, $source, $dependencies = [], $version = 'asset', $footer = true, ?callable $blocker = null, $defer = false)
     {
-        if(empty($handle))
+        if (empty($handle))
             throw new \RuntimeException('A valid `$handle` is required to register a new style');
 
-        if(empty($source))
+        if (empty($source))
             throw new \RuntimeException('A valid `$source` is required to register a new style');
 
         $this->lastItemType = 'script';
@@ -191,7 +191,7 @@ class ScriptsAndStyles extends RunableAbstract
             'blocker' => $blocker
         ];
 
-        if($defer)
+        if ($defer)
             $this->deferredScripts[] = $this->prefix($handle);
 
         return $this;
@@ -200,8 +200,8 @@ class ScriptsAndStyles extends RunableAbstract
     private function getItemByHandle($handle, $items)
     {
         $idx = -1;
-        foreach($items as $key => $item) {
-            if($item['handle'] == $handle) {
+        foreach ($items as $key => $item) {
+            if ($item['handle'] == $handle) {
                 $idx = $key;
                 break;
             }
@@ -217,39 +217,36 @@ class ScriptsAndStyles extends RunableAbstract
      */
     public function asDependency($dependency = null, $parent = 'main', $type = 'script')
     {
-        if($dependency === null)
+        if ($dependency === null)
             $type = $this->lastItemType;
 
-        switch($type) {
-            case 'script':
-            case 'scripts':
-            case 'js':
-                if($dependency === null)
-                    $dependency = $this->prefix($this->scripts[end(array_keys($this->scripts))]['handle']);
+        $collection = &$this->scripts;
 
-                if($parent = $this->getItemByHandle($parent, $this->scripts))
-                    $this->scripts[$parent]['dependencies'][] = $dependency;
-
-                break;
+        switch ($type) {
             case 'style':
             case 'styles':
             case 'css':
-                if($dependency === null)
-                    $dependency = $this->prefix($this->styles[end(array_keys($this->styles))]['handle']);
-
-                if($parent = $this->getItemByHandle($parent, $this->styles))
-                    $this->styles[$parent]['dependencies'][] = $dependency;
-
+                $collection = &$this->styles;
                 break;
+        }
+
+        if ($dependency === null)
+            $dependency = $this->prefix($collection[array_key_last($collection)]['handle']);
+
+        $parentIx = $this->getItemByHandle($parent, $collection);
+
+        if (!empty($collection[$parentIx])) {
+            $collection[$parentIx]['dependencies'][] = $dependency;
         }
 
         return $this;
     }
 
-    public function addDefer($tag, $handle, $src) {
+    public function addDefer($tag, $handle, $src)
+    {
 
         if (in_array($handle, $this->deferredScripts)) {
-            return '<script defer src="'.$src.'"></script>';
+            return '<script defer src="' . $src . '"></script>';
         }
 
         return $tag;
@@ -260,16 +257,16 @@ class ScriptsAndStyles extends RunableAbstract
      */
     public function run()
     {
-        $this->loader()->addAction(($this->admin ? 'admin' : 'wp') . '_enqueue_scripts', function() {
+        $this->loader()->addAction(($this->admin ? 'admin' : 'wp') . '_enqueue_scripts', function () {
 
-            if(is_callable($this->blocker) && call_user_func($this->blocker, []))
+            if (is_callable($this->blocker) && call_user_func($this->blocker, []))
                 return false;
 
-            if($this->admin && $this->media)
+            if ($this->admin && $this->media)
                 wp_enqueue_media();
 
-            if(count($this->scripts) > 0) {
-                foreach($this->scripts as $item) {
+            if (count($this->scripts) > 0) {
+                foreach ($this->scripts as $item) {
                     wp_register_script(
                         $this->prefix($item['handle']),
                         $item['source'],
@@ -280,23 +277,23 @@ class ScriptsAndStyles extends RunableAbstract
                 }
             }
 
-            if(count($this->localizedObjects) > 0) {
-                foreach($this->localizedObjects as $obj) {
+            if (count($this->localizedObjects) > 0) {
+                foreach ($this->localizedObjects as $obj) {
                     wp_localize_script($this->prefix($obj['handle']), $obj['object'], $obj['data']);
                 }
             }
 
-            if(count($this->scripts) > 0) {
-                foreach($this->scripts as $item) {
-                    if(is_callable($item['blocker']) && call_user_func_array($item['blocker'], []))
+            if (count($this->scripts) > 0) {
+                foreach ($this->scripts as $item) {
+                    if (is_callable($item['blocker']) && call_user_func_array($item['blocker'], []))
                         continue;
 
                     wp_enqueue_script($this->prefix($item['handle']));
                 }
             }
 
-            if(count($this->styles) > 0) {
-                foreach($this->styles as $item) {
+            if (count($this->styles) > 0) {
+                foreach ($this->styles as $item) {
                     wp_register_style(
                         $this->prefix($item['handle']),
                         $item['source'],
@@ -306,8 +303,8 @@ class ScriptsAndStyles extends RunableAbstract
                     );
                 }
 
-                foreach($this->styles as $item) {
-                    if(is_callable($item['blocker']) && call_user_func_array($item['blocker'], []))
+                foreach ($this->styles as $item) {
+                    if (is_callable($item['blocker']) && call_user_func_array($item['blocker'], []))
                         continue;
 
                     wp_enqueue_style($this->prefix($item['handle']));

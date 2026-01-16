@@ -54,7 +54,7 @@ class Theme
                 'directory' => $_theme_dir,
                 'path' => $_theme_path,
                 'version' => $this->config['version'],
-                'parent_version' => '1.2.4',
+                'parent_version' => '1.3.0',
                 'config_path' => $_theme_path . 'config/',
                 'color'     => $this->config['styles']['sass']['theme_color'],
                 'icon'      => $this->config['styles']['icon'],
@@ -97,6 +97,10 @@ class Theme
 
             'tag_manager' => function (Container &$c) {
                 return new Setup\GoogleTagManager($c);
+            },
+
+            'updater' => function (Container &$c) {
+                return new Setup\Updater($c);
             },
 
             // Stylesheets and Script registration

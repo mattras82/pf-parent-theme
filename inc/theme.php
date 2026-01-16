@@ -22,11 +22,11 @@ spl_autoload_register(function($class) {
 });
 
 /**
- * This theme requires at least 5.5.12
+ * This theme requires at least 7.3
  */
-if(!version_compare('5.5.12', phpversion(), '<=')) {
+if(!version_compare('7.3', phpversion(), '<=')) {
     PublicFunction\Theme::stop(
-        sprintf(__( 'You must be using PHP 5.5.12 or greater, currently running %s' ), phpversion()),
+        sprintf(__( 'You must be using PHP 7.3 or greater, currently running %s' ), phpversion()),
         __('Invalid PHP Version', 'aod')
     );
 }
